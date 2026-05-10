@@ -175,6 +175,35 @@ body{
     font-size:16px;
 }
 
+/* divider */
+.divider{
+    height:1px;
+    background:#2a2a2a;
+    margin:20px 30px;
+}
+
+/* widget card */
+.widget-card{
+    margin:0 30px 50px;
+    padding:22px;
+    border-radius:28px;
+    background:#1a1b1f;
+    position:relative;
+    height:160px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+.widget-title{
+    font-size:18px;
+    color:#cfcfcf;
+}
+
+.widget-time{
+    font-size:42px;
+    margin-top:18px;
+    font-weight:700;
+}
+
 </style>
 </head>
 
@@ -213,19 +242,14 @@ body{
 <div class="app-name">Netflix</div>
 </a>
 
+<a class="app" href="https://www.max.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/nhW1sKky/IMG-3432.png"></div>
+<div class="app-name">HBO Max</div>
+</a>
+
 <a class="app" href="https://disneyplus.com" target="_blank">
 <div class="app-icon"><img src="https://i.postimg.cc/4yxNtc4N/IMG-3426.png"></div>
 <div class="app-name">Disney+</div>
-</a>
-
-<a class="app" href="https://spotify.com" target="_blank">
-<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174872.png"></div>
-<div class="app-name">Spotify</div>
-</a>
-
-<a class="app" href="https://twitch.tv" target="_blank">
-<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png"></div>
-<div class="app-name">Twitch</div>
 </a>
 
 </div>
@@ -250,16 +274,6 @@ body{
 <a class="app" href="https://reddit.com" target="_blank">
 <div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111589.png"></div>
 <div class="app-name">Reddit</div>
-</a>
-
-<a class="app" href="https://discord.com" target="_blank">
-<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"></div>
-<div class="app-name">Discord</div>
-</a>
-
-<a class="app" href="https://tiktok.com" target="_blank">
-<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"></div>
-<div class="app-name">TikTok</div>
 </a>
 
 </div>
@@ -299,20 +313,48 @@ body{
 </div>
 </div>
 
+<div class="divider"></div>
+
+<!-- WIDGETS -->
+<div class="section-title" style="padding:0 30px;">Widgets</div>
+
+<div class="widget-card">
+    <div class="widget-title" id="sunLabel">Sunset Today</div>
+    <div class="widget-time" id="sunTime">7:30 PM</div>
+</div>
+
+<!-- NEWS + WEATHER -->
+<div class="section">
+<div class="section-title">Quick Access</div>
+
+<div class="apps-row">
+
+<a class="app" href="https://news.google.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/wTZtLwC6/IMG-3433.png"></div>
+<div class="app-name">Google News</div>
+</a>
+
+<a class="app" href="https://weather.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/cL7sCT0Z/IMG-3434.png"></div>
+<div class="app-name">Weather</div>
+</a>
+
+</div>
+</div>
+
 </div>
 
 <script>
 
 function googleSearch(event){
     event.preventDefault();
-
     const q = document.getElementById("searchInput").value;
-
     if(q.trim()){
         window.open("https://www.google.com/search?q=" + encodeURIComponent(q), "_blank");
     }
 }
 
+/* clock */
 function updateClock(){
     const now = new Date();
     let h = now.getHours();
@@ -323,7 +365,25 @@ function updateClock(){
     document.getElementById("clock").innerText = `${h}:${m} ${ampm}`;
 }
 
+/* sunrise / sunset (simple model) */
+function updateSunWidget(){
+    const hour = new Date().getHours();
+
+    const sunrise = "6:10 AM";
+    const sunset = "7:45 PM";
+
+    if(hour >= 6 && hour < 12){
+        document.getElementById("sunLabel").innerText = "Sunrise Today";
+        document.getElementById("sunTime").innerText = sunrise;
+    } else {
+        document.getElementById("sunLabel").innerText = "Sunset Today";
+        document.getElementById("sunTime").innerText = sunset;
+    }
+}
+
 updateClock();
+updateSunWidget();
+
 setInterval(updateClock,1000);
 
 </script>
