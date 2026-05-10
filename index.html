@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Home TV</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Product+Sans:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Product Sans',sans-serif;
+}
+
+body{
+    background:#0b0b0d;
+    color:white;
+    overflow-x:hidden;
+}
+
+.top-banner{
+    width:100%;
+    height:280px;
+    background:url('https://i.postimg.cc/2yMTv4dF/IMG-3425.jpg');
+    background-size:cover;
+    background-position:center;
+    position:relative;
+}
+
+.top-banner::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(11,11,13,1));
+}
+
+.top-ui{
+    position:absolute;
+    top:30px;
+    left:30px;
+    z-index:2;
+}
+
+.search-label{
+    font-size:18px;
+    color:#d7d7d7;
+    margin-bottom:8px;
+}
+
+.time{
+    font-size:48px;
+    font-weight:700;
+}
+
+.content{
+    margin-top:-40px;
+    position:relative;
+    z-index:3;
+}
+
+.search-wrapper{
+    padding:0 30px 35px;
+}
+
+.search-container{
+    background:#1f1f22;
+    border-radius:999px;
+    display:flex;
+    align-items:center;
+    padding:18px 24px;
+    max-width:1000px;
+    margin:auto;
+    border:2px solid transparent;
+}
+
+.search-container:focus-within{
+    border-color:#4285f4;
+}
+
+.search-icon{
+    font-size:22px;
+    margin-right:16px;
+    color:#bdbdbd;
+}
+
+.search-container input{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:white;
+    font-size:18px;
+}
+
+.search-container button{
+    border:none;
+    background:#4285f4;
+    color:white;
+    padding:12px 22px;
+    border-radius:999px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.section{
+    padding:0 30px 45px;
+}
+
+.section-title{
+    font-size:26px;
+    margin-bottom:20px;
+    font-weight:700;
+}
+
+.apps-row{
+    display:flex;
+    gap:22px;
+    overflow-x:auto;
+    padding-bottom:10px;
+}
+
+.apps-row::-webkit-scrollbar{
+    height:8px;
+}
+
+.apps-row::-webkit-scrollbar-thumb{
+    background:#444;
+    border-radius:999px;
+}
+
+.app{
+    text-decoration:none;
+    color:white;
+    min-width:120px;
+    transition:0.2s;
+}
+
+.app:hover{
+    transform:scale(1.06);
+}
+
+.app-icon{
+    width:110px;
+    height:110px;
+    border-radius:28px;
+    background:#1d1f24;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    margin-bottom:12px;
+    border:2px solid transparent;
+}
+
+.app:hover .app-icon{
+    border-color:#4285f4;
+}
+
+.app-icon img{
+    width:62%;
+    height:62%;
+    object-fit:contain;
+}
+
+.app-name{
+    text-align:center;
+    font-size:16px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="top-banner">
+    <div class="top-ui">
+        <div class="search-label">Search</div>
+        <div class="time" id="clock">12:00 PM</div>
+    </div>
+</div>
+
+<div class="content">
+
+<div class="search-wrapper">
+<form class="search-container" onsubmit="googleSearch(event)">
+    <div class="search-icon">⌕</div>
+    <input type="text" id="searchInput" placeholder="Search Google">
+    <button type="submit">Search</button>
+</form>
+</div>
+
+<!-- STREAMING -->
+<div class="section">
+<div class="section-title">Streaming Platforms</div>
+
+<div class="apps-row">
+
+<a class="app" href="https://youtube.com" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"></div>
+<div class="app-name">YouTube</div>
+</a>
+
+<a class="app" href="https://netflix.com" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/5977/5977590.png"></div>
+<div class="app-name">Netflix</div>
+</a>
+
+<a class="app" href="https://disneyplus.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/4yxNtc4N/IMG-3426.png"></div>
+<div class="app-name">Disney+</div>
+</a>
+
+<a class="app" href="https://spotify.com" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/174/174872.png"></div>
+<div class="app-name">Spotify</div>
+</a>
+
+<a class="app" href="https://twitch.tv" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png"></div>
+<div class="app-name">Twitch</div>
+</a>
+
+</div>
+</div>
+
+<!-- SOCIAL -->
+<div class="section">
+<div class="section-title">Social Media</div>
+
+<div class="apps-row">
+
+<a class="app" href="https://instagram.com" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></div>
+<div class="app-name">Instagram</div>
+</a>
+
+<a class="app" href="https://x.com" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968830.png"></div>
+<div class="app-name">X</div>
+</a>
+
+<a class="app" href="https://reddit.com" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111589.png"></div>
+<div class="app-name">Reddit</div>
+</a>
+
+<a class="app" href="https://discord.com" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"></div>
+<div class="app-name">Discord</div>
+</a>
+
+<a class="app" href="https://tiktok.com" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"></div>
+<div class="app-name">TikTok</div>
+</a>
+
+</div>
+</div>
+
+<!-- GOOGLE -->
+<div class="section">
+<div class="section-title">Google Apps</div>
+
+<div class="apps-row">
+
+<a class="app" href="https://docs.google.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/hj3NyQbF/IMG-3427.png"></div>
+<div class="app-name">Docs</div>
+</a>
+
+<a class="app" href="https://slides.google.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/BvZqRDDw/IMG-3428.png"></div>
+<div class="app-name">Slides</div>
+</a>
+
+<a class="app" href="https://drive.google.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/TwmH9NwF/IMG-3429.png"></div>
+<div class="app-name">Drive</div>
+</a>
+
+<a class="app" href="https://maps.google.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/HkR2h0fT/IMG-3431.png"></div>
+<div class="app-name">Maps</div>
+</a>
+
+<a class="app" href="https://gemini.google.com" target="_blank">
+<div class="app-icon"><img src="https://www.gstatic.com/lamda/images/gemini_sparkle_v002_advanced_1.svg"></div>
+<div class="app-name">Gemini</div>
+</a>
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+function googleSearch(event){
+    event.preventDefault();
+
+    const q = document.getElementById("searchInput").value;
+
+    if(q.trim()){
+        window.open("https://www.google.com/search?q=" + encodeURIComponent(q), "_blank");
+    }
+}
+
+function updateClock(){
+    const now = new Date();
+    let h = now.getHours();
+    let m = now.getMinutes();
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    m = m < 10 ? "0" + m : m;
+    document.getElementById("clock").innerText = `${h}:${m} ${ampm}`;
+}
+
+updateClock();
+setInterval(updateClock,1000);
+
+</script>
+
+</body>
+</html>
