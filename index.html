@@ -160,10 +160,6 @@ body{
     border:2px solid transparent;
 }
 
-.app:hover .app-icon{
-    border-color:#4285f4;
-}
-
 .app-icon img{
     width:62%;
     height:62%;
@@ -179,17 +175,15 @@ body{
 .divider{
     height:1px;
     background:#2a2a2a;
-    margin:20px 30px;
+    margin:10px 30px 25px;
 }
 
-/* widget card */
+/* widgets */
 .widget-card{
-    margin:0 30px 50px;
+    margin:0 30px 20px;
     padding:22px;
     border-radius:28px;
     background:#1a1b1f;
-    position:relative;
-    height:160px;
     box-shadow:0 10px 30px rgba(0,0,0,0.4);
 }
 
@@ -200,8 +194,14 @@ body{
 
 .widget-time{
     font-size:42px;
-    margin-top:18px;
+    margin-top:12px;
     font-weight:700;
+}
+
+.widget-sub{
+    margin-top:6px;
+    color:#bdbdbd;
+    font-size:16px;
 }
 
 </style>
@@ -212,12 +212,13 @@ body{
 <div class="top-banner">
     <div class="top-ui">
         <div class="search-label">Search</div>
-        <div class="time" id="clock">12:00 PM</div>
+        <div class="time" id="clock">--:--:--</div>
     </div>
 </div>
 
 <div class="content">
 
+<!-- SEARCH -->
 <div class="search-wrapper">
 <form class="search-container" onsubmit="googleSearch(event)">
     <div class="search-icon">⌕</div>
@@ -225,6 +226,21 @@ body{
     <button type="submit">Search</button>
 </form>
 </div>
+
+<!-- WIDGET 1 -->
+<div class="widget-card">
+    <div class="widget-title" id="sunLabel">Sunset Today</div>
+    <div class="widget-time" id="sunTime">7:45 PM</div>
+</div>
+
+<!-- WIDGET 2 -->
+<div class="widget-card">
+    <div class="widget-title">Date & Time</div>
+    <div class="widget-time" id="dateTime">--:--:--</div>
+    <div class="widget-sub" id="dateMonth">--</div>
+</div>
+
+<div class="divider"></div>
 
 <!-- STREAMING -->
 <div class="section">
@@ -276,6 +292,16 @@ body{
 <div class="app-name">Reddit</div>
 </a>
 
+<a class="app" href="https://discord.com" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"></div>
+<div class="app-name">Discord</div>
+</a>
+
+<a class="app" href="https://tiktok.com" target="_blank">
+<div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"></div>
+<div class="app-name">TikTok</div>
+</a>
+
 </div>
 </div>
 
@@ -310,20 +336,25 @@ body{
 <div class="app-name">Gemini</div>
 </a>
 
+<a class="app" href="https://translate.google.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/6QkV590W/IMG-3438.png"></div>
+<div class="app-name">Translate</div>
+</a>
+
+<a class="app" href="https://passwords.google.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/Z50689sP/IMG-3439.png"></div>
+<div class="app-name">Passwords</div>
+</a>
+
+<a class="app" href="https://mail.google.com" target="_blank">
+<div class="app-icon"><img src="https://i.postimg.cc/c4L3WgSz/IMG-3440.png"></div>
+<div class="app-name">Gmail</div>
+</a>
+
 </div>
 </div>
 
-<div class="divider"></div>
-
-<!-- WIDGETS -->
-<div class="section-title" style="padding:0 30px;">Widgets</div>
-
-<div class="widget-card">
-    <div class="widget-title" id="sunLabel">Sunset Today</div>
-    <div class="widget-time" id="sunTime">7:30 PM</div>
-</div>
-
-<!-- NEWS + WEATHER -->
+<!-- QUICK -->
 <div class="section">
 <div class="section-title">Quick Access</div>
 
@@ -331,7 +362,7 @@ body{
 
 <a class="app" href="https://news.google.com" target="_blank">
 <div class="app-icon"><img src="https://i.postimg.cc/wTZtLwC6/IMG-3433.png"></div>
-<div class="app-name">Google News</div>
+<div class="app-name">News</div>
 </a>
 
 <a class="app" href="https://weather.com" target="_blank">
@@ -346,27 +377,58 @@ body{
 
 <script>
 
-function googleSearch(event){
-    event.preventDefault();
+function googleSearch(e){
+    e.preventDefault();
     const q = document.getElementById("searchInput").value;
     if(q.trim()){
         window.open("https://www.google.com/search?q=" + encodeURIComponent(q), "_blank");
     }
 }
 
-/* clock */
 function updateClock(){
     const now = new Date();
+
     let h = now.getHours();
     let m = now.getMinutes();
+    let s = now.getSeconds();
+
     const ampm = h >= 12 ? "PM" : "AM";
     h = h % 12 || 12;
+
     m = m < 10 ? "0" + m : m;
-    document.getElementById("clock").innerText = `${h}:${m} ${ampm}`;
+    s = s < 10 ? "0" + s : s;
+
+    document.getElementById("clock").innerText =
+    `${h}:${m}:${s} ${ampm}`;
 }
 
-/* sunrise / sunset (simple model) */
-function updateSunWidget(){
+function updateDateWidget(){
+    const now = new Date();
+
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+    const month = months[now.getMonth()];
+    const day = now.getDate();
+    const year = now.getFullYear();
+
+    let h = now.getHours();
+    let m = now.getMinutes();
+    let s = now.getSeconds();
+
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+
+    m = m < 10 ? "0" + m : m;
+    s = s < 10 ? "0" + s : s;
+
+    document.getElementById("dateTime").innerText =
+    `${h}:${m}:${s} ${ampm}`;
+
+    document.getElementById("dateMonth").innerText =
+    `${month} ${day}, ${year}`;
+}
+
+function updateSun(){
     const hour = new Date().getHours();
 
     const sunrise = "6:10 AM";
@@ -382,9 +444,11 @@ function updateSunWidget(){
 }
 
 updateClock();
-updateSunWidget();
+updateDateWidget();
+updateSun();
 
 setInterval(updateClock,1000);
+setInterval(updateDateWidget,1000);
 
 </script>
 
