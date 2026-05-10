@@ -65,15 +65,10 @@ body.grid .app{
     font-weight:700;
 }
 
-/* WEATHER */
-.weather-widget{
-    position:absolute;
-    top:25px;
-    right:25px;
-    z-index:2;
-    text-align:right;
+.welcome-text{
+    margin-top:6px;
     font-size:14px;
-    opacity:0.9;
+    opacity:0.8;
 }
 
 /* QUOTE WIDGET */
@@ -191,11 +186,7 @@ body.grid .app{
 
     <div class="top-ui">
         <div class="time" id="clock">--:--:--</div>
-    </div>
-
-    <div class="weather-widget">
-        <div id="weatherTemp">--°</div>
-        <div id="weatherText">Loading...</div>
+        <div class="welcome-text">Its great to see you again, what brings you here today?</div>
     </div>
 
     <div class="quote-widget">
@@ -351,11 +342,6 @@ body.grid .app{
 <div class="app-name">News</div>
 </a>
 
-<a class="app" href="https://weather.com">
-<div class="app-icon"><img src="https://i.postimg.cc/cL7sCT0Z/IMG-3446.png"></div>
-<div class="app-name">Weather</div>
-</a>
-
 </div>
 </div>
 
@@ -382,7 +368,7 @@ Grid View
 
 <script>
 
-/* CLOCK FIX */
+/* CLOCK */
 function updateClock(){
 const d=new Date();
 let h=d.getHours();
@@ -395,7 +381,7 @@ document.getElementById("clock").innerText=`${h}:${m}:${s} ${am}`;
 setInterval(updateClock,1000);
 updateClock();
 
-/* QUOTES (better set) */
+/* QUOTES */
 const quotes=[
 "Good design is invisible. — Dieter Rams",
 "Simplicity is the ultimate sophistication. — Leonardo da Vinci",
@@ -417,41 +403,19 @@ el.classList.remove("quote-fade-out");
 setInterval(changeQuote,10000);
 document.getElementById("quoteText").textContent=quotes[0];
 
-/* WEATHER */
-async function loadWeather(lat,lon){
-const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`);
-const d=await r.json();
-
-let t=Math.round(d.current.temperature_2m);
-let c=d.current.weather_code;
-
-let s="Clear";
-if(c>=1&&c<=3) s="Cloudy";
-if(c>=45&&c<=48) s="Fog";
-if(c>=51&&c<=67) s="Rain";
-if(c>=71&&c<=77) s="Snow";
-if(c>=95) s="Storm";
-
-document.getElementById("weatherTemp").innerText=t+"°";
-document.getElementById("weatherText").innerText=s;
-}
-
-navigator.geolocation.getCurrentPosition(p=>{
-loadWeather(p.coords.latitude,p.coords.longitude);
-});
-
 /* SEARCH */
 function handleSearch(e){
 e.preventDefault();
 let i=document.getElementById("searchInput").value.trim();
 if(!i) return;
 
-if(i.includes(".")){
-if(!i.startsWith("http")) i="https://"+i;
+try{
+new URL(i);
 window.open(i);
-}else{
+return;
+}catch{}
+
 window.open("https://www.google.com/search?q="+encodeURIComponent(i));
-}
 }
 
 function toggleGrid(el){
