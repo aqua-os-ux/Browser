@@ -6,9 +6,6 @@
 
 <title>Home TV</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Product+Sans:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
@@ -26,9 +23,23 @@ body{
     overflow-x:hidden;
 }
 
+/* GRID MODE */
+body.grid .apps-row{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:25px;
+}
+
+body.grid .app{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+/* TOP BANNER */
 .top-banner{
     width:100%;
-    height:280px;
+    height:260px;
     background:url('https://i.postimg.cc/2yMTv4dF/IMG-3425.jpg');
     background-size:cover;
     background-position:center;
@@ -44,15 +55,9 @@ body{
 
 .top-ui{
     position:absolute;
-    top:30px;
-    left:30px;
+    top:25px;
+    left:25px;
     z-index:2;
-}
-
-.search-label{
-    font-size:18px;
-    color:#d7d7d7;
-    margin-bottom:8px;
 }
 
 .time{
@@ -60,14 +65,32 @@ body{
     font-weight:700;
 }
 
-.content{
-    margin-top:-40px;
-    position:relative;
-    z-index:3;
+/* QUOTE WIDGET */
+.quote-widget{
+    position:absolute;
+    bottom:25px;
+    left:30px;
+    right:30px;
+    z-index:2;
+    font-size:20px;
+    color:white;
+    opacity:0.9;
+    transition:opacity 1s ease, transform 1s ease;
 }
 
+.quote-fade-out{
+    opacity:0;
+    transform:translateY(10px);
+}
+
+.quote-fade-in{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* SEARCH */
 .search-wrapper{
-    padding:0 30px 35px;
+    padding:20px 30px;
 }
 
 .search-container{
@@ -75,20 +98,7 @@ body{
     border-radius:999px;
     display:flex;
     align-items:center;
-    padding:18px 24px;
-    max-width:1000px;
-    margin:auto;
-    border:2px solid transparent;
-}
-
-.search-container:focus-within{
-    border-color:#4285f4;
-}
-
-.search-icon{
-    font-size:22px;
-    margin-right:16px;
-    color:#bdbdbd;
+    padding:16px 20px;
 }
 
 .search-container input{
@@ -97,54 +107,40 @@ body{
     border:none;
     outline:none;
     color:white;
-    font-size:18px;
+    font-size:16px;
 }
 
 .search-container button{
     border:none;
     background:#4285f4;
     color:white;
-    padding:12px 22px;
+    padding:10px 18px;
     border-radius:999px;
-    font-size:16px;
     cursor:pointer;
 }
 
+/* SECTIONS */
 .section{
     padding:0 30px 45px;
 }
 
 .section-title{
-    font-size:26px;
-    margin-bottom:20px;
+    font-size:24px;
+    margin-bottom:18px;
     font-weight:700;
 }
 
 .apps-row{
     display:flex;
-    gap:22px;
+    gap:20px;
     overflow-x:auto;
-    padding-bottom:10px;
 }
 
-.apps-row::-webkit-scrollbar{
-    height:8px;
-}
-
-.apps-row::-webkit-scrollbar-thumb{
-    background:#444;
-    border-radius:999px;
-}
-
+/* APP */
 .app{
     text-decoration:none;
     color:white;
     min-width:120px;
-    transition:0.2s;
-}
-
-.app:hover{
-    transform:scale(1.06);
 }
 
 .app-icon{
@@ -155,53 +151,29 @@ body{
     display:flex;
     align-items:center;
     justify-content:center;
-    overflow:hidden;
-    margin-bottom:12px;
-    border:2px solid transparent;
+    margin-bottom:10px;
 }
 
 .app-icon img{
-    width:62%;
-    height:62%;
+    width:60%;
+    height:60%;
     object-fit:contain;
 }
 
 .app-name{
     text-align:center;
-    font-size:16px;
+    font-size:15px;
 }
 
-/* divider */
-.divider{
-    height:1px;
-    background:#2a2a2a;
-    margin:10px 30px 25px;
-}
-
-/* widgets */
-.widget-card{
-    margin:0 30px 20px;
-    padding:22px;
-    border-radius:28px;
+/* TOGGLE */
+.toggle{
+    position:fixed;
+    bottom:20px;
+    right:20px;
     background:#1a1b1f;
-    box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
-
-.widget-title{
-    font-size:18px;
-    color:#cfcfcf;
-}
-
-.widget-time{
-    font-size:42px;
-    margin-top:12px;
-    font-weight:700;
-}
-
-.widget-sub{
-    margin-top:6px;
-    color:#bdbdbd;
-    font-size:16px;
+    padding:12px 14px;
+    border-radius:12px;
+    font-size:14px;
 }
 
 </style>
@@ -210,90 +182,76 @@ body{
 <body>
 
 <div class="top-banner">
+
     <div class="top-ui">
-        <div class="search-label">Search</div>
         <div class="time" id="clock">--:--:--</div>
     </div>
-</div>
 
-<div class="content">
+    <div class="quote-widget">
+        <div id="quoteText">Loading quote...</div>
+    </div>
+
+</div>
 
 <!-- SEARCH -->
 <div class="search-wrapper">
-<form class="search-container" onsubmit="googleSearch(event)">
-    <div class="search-icon">⌕</div>
-    <input type="text" id="searchInput" placeholder="Search Google">
-    <button type="submit">Search</button>
+<form class="search-container" onsubmit="handleSearch(event)">
+    <input id="searchInput" placeholder="Search or enter URL">
+    <button type="submit">Go</button>
 </form>
 </div>
 
-<!-- WIDGET 1 -->
-<div class="widget-card">
-    <div class="widget-title" id="sunLabel">Sunset Today</div>
-    <div class="widget-time" id="sunTime">7:45 PM</div>
-</div>
-
-<!-- WIDGET 2 -->
-<div class="widget-card">
-    <div class="widget-title">Date & Time</div>
-    <div class="widget-time" id="dateTime">--:--:--</div>
-    <div class="widget-sub" id="dateMonth">--</div>
-</div>
-
-<div class="divider"></div>
-
 <!-- STREAMING -->
 <div class="section">
-<div class="section-title">Streaming Platforms</div>
-
+<div class="section-title">Streaming</div>
 <div class="apps-row">
 
-<a class="app" href="https://youtube.com" target="_blank">
+<a class="app" href="https://youtube.com">
 <div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"></div>
 <div class="app-name">YouTube</div>
 </a>
 
-<a class="app" href="https://netflix.com" target="_blank">
+<a class="app" href="https://netflix.com">
 <div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/5977/5977590.png"></div>
 <div class="app-name">Netflix</div>
 </a>
 
-<a class="app" href="https://www.crunchyroll.com" target="_blank">
+<a class="app" href="https://www.crunchyroll.com">
 <div class="app-icon"><img src="https://i.postimg.cc/PqTp6P2b/IMG-3441.png"></div>
 <div class="app-name">Crunchyroll</div>
 </a>
 
-<a class="app" href="https://tv.apple.com" target="_blank">
+<a class="app" href="https://tv.apple.com">
 <div class="app-icon"><img src="https://i.postimg.cc/vHn4bWKP/IMG-3442.png"></div>
 <div class="app-name">Apple TV</div>
 </a>
 
-<a class="app" href="https://www.hulu.com" target="_blank">
+<a class="app" href="https://www.hulu.com">
 <div class="app-icon"><img src="https://i.postimg.cc/1zvtJMg8/IMG-3443.png"></div>
 <div class="app-name">Hulu</div>
 </a>
 
-<a class="app" href="https://www.paramountplus.com" target="_blank">
+<a class="app" href="https://www.paramountplus.com">
 <div class="app-icon"><img src="https://i.postimg.cc/zXhjL2vq/IMG-3444.png"></div>
 <div class="app-name">Paramount+</div>
 </a>
 
-<a class="app" href="https://tubi.tv" target="_blank">
+<a class="app" href="https://tubi.tv">
 <div class="app-icon"><img src="https://i.postimg.cc/V659zD2M/IMG-3445.png"></div>
 <div class="app-name">Tubi</div>
 </a>
 
-<a class="app" href="https://www.peacocktv.com" target="_blank">
+<a class="app" href="https://www.peacocktv.com">
 <div class="app-icon"><img src="https://i.postimg.cc/bY70j0gc/IMG-3446.png"></div>
 <div class="app-name">Peacock</div>
 </a>
 
-<a class="app" href="https://www.max.com" target="_blank">
+<a class="app" href="https://www.max.com">
 <div class="app-icon"><img src="https://i.postimg.cc/nhW1sKky/IMG-3432.png"></div>
 <div class="app-name">HBO Max</div>
 </a>
 
-<a class="app" href="https://disneyplus.com" target="_blank">
+<a class="app" href="https://disneyplus.com">
 <div class="app-icon"><img src="https://i.postimg.cc/4yxNtc4N/IMG-3426.png"></div>
 <div class="app-name">Disney+</div>
 </a>
@@ -303,31 +261,30 @@ body{
 
 <!-- SOCIAL -->
 <div class="section">
-<div class="section-title">Social Media</div>
-
+<div class="section-title">Social</div>
 <div class="apps-row">
 
-<a class="app" href="https://instagram.com" target="_blank">
+<a class="app" href="https://instagram.com">
 <div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"></div>
 <div class="app-name">Instagram</div>
 </a>
 
-<a class="app" href="https://x.com" target="_blank">
+<a class="app" href="https://x.com">
 <div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968830.png"></div>
 <div class="app-name">X</div>
 </a>
 
-<a class="app" href="https://reddit.com" target="_blank">
+<a class="app" href="https://reddit.com">
 <div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111589.png"></div>
 <div class="app-name">Reddit</div>
 </a>
 
-<a class="app" href="https://discord.com" target="_blank">
+<a class="app" href="https://discord.com">
 <div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png"></div>
 <div class="app-name">Discord</div>
 </a>
 
-<a class="app" href="https://tiktok.com" target="_blank">
+<a class="app" href="https://tiktok.com">
 <div class="app-icon"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png"></div>
 <div class="app-name">TikTok</div>
 </a>
@@ -337,46 +294,35 @@ body{
 
 <!-- GOOGLE -->
 <div class="section">
-<div class="section-title">Google Apps</div>
-
+<div class="section-title">Google</div>
 <div class="apps-row">
 
-<a class="app" href="https://docs.google.com" target="_blank">
+<a class="app" href="https://docs.google.com">
 <div class="app-icon"><img src="https://i.postimg.cc/hj3NyQbF/IMG-3427.png"></div>
 <div class="app-name">Docs</div>
 </a>
 
-<a class="app" href="https://slides.google.com" target="_blank">
+<a class="app" href="https://slides.google.com">
 <div class="app-icon"><img src="https://i.postimg.cc/BvZqRDDw/IMG-3428.png"></div>
 <div class="app-name">Slides</div>
 </a>
 
-<a class="app" href="https://drive.google.com" target="_blank">
+<a class="app" href="https://drive.google.com">
 <div class="app-icon"><img src="https://i.postimg.cc/TwmH9NwF/IMG-3429.png"></div>
 <div class="app-name">Drive</div>
 </a>
 
-<a class="app" href="https://maps.google.com" target="_blank">
+<a class="app" href="https://maps.google.com">
 <div class="app-icon"><img src="https://i.postimg.cc/66FCw6MV/IMG-3430.png"></div>
 <div class="app-name">Maps</div>
 </a>
 
-<a class="app" href="https://gemini.google.com" target="_blank">
+<a class="app" href="https://gemini.google.com">
 <div class="app-icon"><img src="https://i.postimg.cc/HkR2h0fT/IMG-3431.png"></div>
 <div class="app-name">Gemini</div>
 </a>
 
-<a class="app" href="https://translate.google.com" target="_blank">
-<div class="app-icon"><img src="https://i.postimg.cc/6QkV590W/IMG-3438.png"></div>
-<div class="app-name">Translate</div>
-</a>
-
-<a class="app" href="https://passwords.google.com" target="_blank">
-<div class="app-icon"><img src="https://i.postimg.cc/Z50689sP/IMG-3439.png"></div>
-<div class="app-name">Passwords</div>
-</a>
-
-<a class="app" href="https://mail.google.com" target="_blank">
+<a class="app" href="https://mail.google.com">
 <div class="app-icon"><img src="https://i.postimg.cc/c4L3WgSz/IMG-3440.png"></div>
 <div class="app-name">Gmail</div>
 </a>
@@ -386,16 +332,15 @@ body{
 
 <!-- QUICK -->
 <div class="section">
-<div class="section-title">Quick Access</div>
-
+<div class="section-title">Quick</div>
 <div class="apps-row">
 
-<a class="app" href="https://news.google.com" target="_blank">
+<a class="app" href="https://news.google.com">
 <div class="app-icon"><img src="https://i.postimg.cc/wTZtLwC6/IMG-3433.png"></div>
 <div class="app-name">News</div>
 </a>
 
-<a class="app" href="https://weather.com" target="_blank">
+<a class="app" href="https://weather.com">
 <div class="app-icon"><img src="https://i.postimg.cc/cL7sCT0Z/IMG-3446.png"></div>
 <div class="app-name">Weather</div>
 </a>
@@ -403,82 +348,101 @@ body{
 </div>
 </div>
 
+<!-- EXTRA -->
+<div class="section">
+<div class="section-title">Extra</div>
+<div class="apps-row">
+
+<a class="app" href="https://www.microsoft365.com">
+<div class="app-icon"><img src="https://i.postimg.cc/MZ9gwmpx/IMG-3458.png"></div>
+<div class="app-name">Microsoft 365</div>
+</a>
+
+</div>
+</div>
+
+<!-- GRID TOGGLE -->
+<div class="toggle">
+<label>
+<input type="checkbox" onchange="toggleGrid(this)">
+Grid View
+</label>
 </div>
 
 <script>
 
-function googleSearch(e){
+function handleSearch(e){
     e.preventDefault();
-    const q = document.getElementById("searchInput").value;
-    if(q.trim()){
-        window.open("https://www.google.com/search?q=" + encodeURIComponent(q), "_blank");
+
+    let input = document.getElementById("searchInput").value.trim();
+    if(!input) return;
+
+    const isURL = input.includes(".") || input.startsWith("http");
+
+    if(isURL){
+        if(!input.startsWith("http")){
+            input = "https://" + input;
+        }
+        window.open(input,"_blank");
+    } else {
+        window.open("https://www.google.com/search?q=" + encodeURIComponent(input), "_blank");
     }
 }
 
+function toggleGrid(el){
+    document.body.classList.toggle("grid", el.checked);
+}
+
+/* CLOCK */
 function updateClock(){
     const now = new Date();
-
     let h = now.getHours();
     let m = now.getMinutes();
     let s = now.getSeconds();
 
     const ampm = h >= 12 ? "PM" : "AM";
     h = h % 12 || 12;
-
-    m = m < 10 ? "0" + m : m;
-    s = s < 10 ? "0" + s : s;
 
     document.getElementById("clock").innerText =
     `${h}:${m}:${s} ${ampm}`;
 }
 
-function updateDateWidget(){
-    const now = new Date();
+/* QUOTES */
+const quotes = [
+    "Technology connects everything.",
+    "Good design disappears into the experience.",
+    "Simple systems last longer.",
+    "Build for clarity, not complexity.",
+    "Interfaces should feel natural.",
+    "Less friction, more flow."
+];
 
-    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+let qIndex = 0;
 
-    const month = months[now.getMonth()];
-    const day = now.getDate();
-    const year = now.getFullYear();
+function changeQuote(){
+    const el = document.getElementById("quoteText");
 
-    let h = now.getHours();
-    let m = now.getMinutes();
-    let s = now.getSeconds();
+    el.classList.add("quote-fade-out");
 
-    const ampm = h >= 12 ? "PM" : "AM";
-    h = h % 12 || 12;
+    setTimeout(() => {
+        qIndex = (qIndex + 1) % quotes.length;
+        el.textContent = quotes[qIndex];
 
-    m = m < 10 ? "0" + m : m;
-    s = s < 10 ? "0" + s : s;
+        el.classList.remove("quote-fade-out");
+        el.classList.add("quote-fade-in");
+    }, 600);
 
-    document.getElementById("dateTime").innerText =
-    `${h}:${m}:${s} ${ampm}`;
-
-    document.getElementById("dateMonth").innerText =
-    `${month} ${day}, ${year}`;
+    setTimeout(() => {
+        el.classList.remove("quote-fade-in");
+    }, 1200);
 }
 
-function updateSun(){
-    const hour = new Date().getHours();
+document.getElementById("quoteText").textContent = quotes[0];
 
-    const sunrise = "6:10 AM";
-    const sunset = "7:45 PM";
-
-    if(hour >= 6 && hour < 12){
-        document.getElementById("sunLabel").innerText = "Sunrise Today";
-        document.getElementById("sunTime").innerText = sunrise;
-    } else {
-        document.getElementById("sunLabel").innerText = "Sunset Today";
-        document.getElementById("sunTime").innerText = sunset;
-    }
-}
-
-updateClock();
-updateDateWidget();
-updateSun();
+setInterval(changeQuote, 10000);
 
 setInterval(updateClock,1000);
-setInterval(updateDateWidget,1000);
+updateClock();
 
 </script>
 
