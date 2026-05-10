@@ -65,6 +65,17 @@ body.grid .app{
     font-weight:700;
 }
 
+/* WEATHER */
+.weather-widget{
+    position:absolute;
+    top:25px;
+    right:25px;
+    z-index:2;
+    text-align:right;
+    font-size:14px;
+    opacity:0.9;
+}
+
 /* QUOTE WIDGET */
 .quote-widget{
     position:absolute;
@@ -81,11 +92,6 @@ body.grid .app{
 .quote-fade-out{
     opacity:0;
     transform:translateY(10px);
-}
-
-.quote-fade-in{
-    opacity:1;
-    transform:translateY(0);
 }
 
 /* SEARCH */
@@ -185,6 +191,11 @@ body.grid .app{
 
     <div class="top-ui">
         <div class="time" id="clock">--:--:--</div>
+    </div>
+
+    <div class="weather-widget">
+        <div id="weatherTemp">--°</div>
+        <div id="weatherText">Loading...</div>
     </div>
 
     <div class="quote-widget">
@@ -361,7 +372,7 @@ body.grid .app{
 </div>
 </div>
 
-<!-- GRID TOGGLE -->
+<!-- TOGGLE -->
 <div class="toggle">
 <label>
 <input type="checkbox" onchange="toggleGrid(this)">
@@ -371,78 +382,81 @@ Grid View
 
 <script>
 
+/* CLOCK FIX */
+function updateClock(){
+const d=new Date();
+let h=d.getHours();
+let m=String(d.getMinutes()).padStart(2,'0');
+let s=String(d.getSeconds()).padStart(2,'0');
+let am=h>=12?"PM":"AM";
+h=h%12||12;
+document.getElementById("clock").innerText=`${h}:${m}:${s} ${am}`;
+}
+setInterval(updateClock,1000);
+updateClock();
+
+/* QUOTES (better set) */
+const quotes=[
+"Good design is invisible. — Dieter Rams",
+"Simplicity is the ultimate sophistication. — Leonardo da Vinci",
+"Design is intelligence made visible. — Alina Wheeler",
+"Focus is saying no. — Steve Jobs",
+"Less, but better. — Dieter Rams"
+];
+
+let q=0;
+function changeQuote(){
+const el=document.getElementById("quoteText");
+el.classList.add("quote-fade-out");
+setTimeout(()=>{
+q=(q+1)%quotes.length;
+el.textContent=quotes[q];
+el.classList.remove("quote-fade-out");
+},600);
+}
+setInterval(changeQuote,10000);
+document.getElementById("quoteText").textContent=quotes[0];
+
+/* WEATHER */
+async function loadWeather(lat,lon){
+const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&temperature_unit=fahrenheit&timezone=auto`);
+const d=await r.json();
+
+let t=Math.round(d.current.temperature_2m);
+let c=d.current.weather_code;
+
+let s="Clear";
+if(c>=1&&c<=3) s="Cloudy";
+if(c>=45&&c<=48) s="Fog";
+if(c>=51&&c<=67) s="Rain";
+if(c>=71&&c<=77) s="Snow";
+if(c>=95) s="Storm";
+
+document.getElementById("weatherTemp").innerText=t+"°";
+document.getElementById("weatherText").innerText=s;
+}
+
+navigator.geolocation.getCurrentPosition(p=>{
+loadWeather(p.coords.latitude,p.coords.longitude);
+});
+
+/* SEARCH */
 function handleSearch(e){
-    e.preventDefault();
+e.preventDefault();
+let i=document.getElementById("searchInput").value.trim();
+if(!i) return;
 
-    let input = document.getElementById("searchInput").value.trim();
-    if(!input) return;
-
-    const isURL = input.includes(".") || input.startsWith("http");
-
-    if(isURL){
-        if(!input.startsWith("http")){
-            input = "https://" + input;
-        }
-        window.open(input,"_blank");
-    } else {
-        window.open("https://www.google.com/search?q=" + encodeURIComponent(input), "_blank");
-    }
+if(i.includes(".")){
+if(!i.startsWith("http")) i="https://"+i;
+window.open(i);
+}else{
+window.open("https://www.google.com/search?q="+encodeURIComponent(i));
+}
 }
 
 function toggleGrid(el){
-    document.body.classList.toggle("grid", el.checked);
+document.body.classList.toggle("grid",el.checked);
 }
-
-/* CLOCK */
-function updateClock(){
-    const now = new Date();
-    let h = now.getHours();
-    let m = now.getMinutes();
-    let s = now.getSeconds();
-
-    const ampm = h >= 12 ? "PM" : "AM";
-    h = h % 12 || 12;
-
-    document.getElementById("clock").innerText =
-    `${h}:${m}:${s} ${ampm}`;
-}
-
-/* QUOTES */
-const quotes = [
-    "Technology connects everything.",
-    "Good design disappears into the experience.",
-    "Simple systems last longer.",
-    "Build for clarity, not complexity.",
-    "Interfaces should feel natural.",
-    "Less friction, more flow."
-];
-
-let qIndex = 0;
-
-function changeQuote(){
-    const el = document.getElementById("quoteText");
-
-    el.classList.add("quote-fade-out");
-
-    setTimeout(() => {
-        qIndex = (qIndex + 1) % quotes.length;
-        el.textContent = quotes[qIndex];
-
-        el.classList.remove("quote-fade-out");
-        el.classList.add("quote-fade-in");
-    }, 600);
-
-    setTimeout(() => {
-        el.classList.remove("quote-fade-in");
-    }, 1200);
-}
-
-document.getElementById("quoteText").textContent = quotes[0];
-
-setInterval(changeQuote, 10000);
-
-setInterval(updateClock,1000);
-updateClock();
 
 </script>
 
